@@ -1,8 +1,15 @@
 <script>
     function crearTableContactos(){
 
-        google.script.run.withSuccessHandler( 
-            function(obj)
+        google.script.run
+        .withSuccessHandler(crearTablaContactosCorrectamente)
+        .withFailureHandler(crearTablaContactosError)
+        .obtenerContactos();
+
+    }
+
+
+    function crearTablaContactosCorrectamente(obj)
             {
                 let tabla = document.getElementById('tablaContactos');
                 if(tabla) tabla.remove();
@@ -32,8 +39,28 @@
 
                 document.getElementById('divContactos').appendChild(tabla);
 
+                //mostrar notificacion de ok
+                crearNotificacion(1,'Contactos obtenidos correctamente','todo en orden')
             }
-        ).obtenerContactos();
 
+
+    function crearTablaContactosError(){
+        //mostrar notificacion de error
+    }
+    function crearNotificacion(tipo,mensaje,titulo){
+        //obtener datos
+        let textoNotificacion = document.getElementById('textoNotificacion');
+        let tituloNotificacion = document.getElementById('tituloNotificacion');
+        let elementoNotificacion = document.getElementById('notificacion');
+        let iconoNotificacion = document.getElementById('iconoNotificacion');
+        let notificacion = bootstrap.Toast.getOrCreateInstance(elementoNotificacion);
+        //editar la notificacion
+        iconoNotificacion.className = '';
+        iconoNotificacion.classList.add('bi','bi-check2-square');
+        textoNotificacion.textContent = mensaje;
+        tituloNotificacion.textContent = titulo;
+        elementoNotificacion.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--color-verde-oscuro');
+        //mostrar notificacion
+        notificacion.show();
     }
 </script>
