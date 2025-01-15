@@ -1,9 +1,56 @@
 <script>
+
+    function insertarContacto(){
+
+    //obtener datos
+    let nombre = document.getElementById('nombre').value;
+    let correo = document.getElementById('correo').value;
+
+    //crear loader
+    crearLoader('divContactos');
+
+    google.script.run
+    .withSuccessHandler(contactoInsertadoCorrectamente)
+    .withFailureHandler(contactoInsertadoError)
+    .insertarContacto(nombre,correo);
+
+    }
+
+    function contactoInsertadoCorrectamente()
+    {
+         //eliminar datos de input
+        let nombre = document.getElementById('nombre').value = '';
+        let correo = document.getElementById('correo').value = '';
+
+        //eliminar tabla
+        eliminarTabla();
+
+        // mostrar notificacion
+        crearNotificacionOK('Contacto insertado correctamente','CONTACTO OK');
+
+        //eliminar loader
+        eliminarLoader()
+
+        //mostrar tabla contactos
+        crearTableContactos();
+    }
+    function contactoInsertadoError()
+    {
+        crearIconoNotificacionError('No se ha podido insertar el contacto','ERROR');
+        //eliminar loader
+        eliminarLoader()
+
+        //mostrar tabla contactos
+        crearTableContactos();
+    }
         
     function crearTableContactos(){
 
-        let tabla = document.getElementById('tablaContactos');
-        if(tabla) tabla.remove();
+        //eliminar la tabla si existe
+        eliminarTabla();
+    
+        //crear loader
+        crearLoader('divContactos');
 
         google.script.run
         .withSuccessHandler(crearTablaContactosCorrectamente)
@@ -44,12 +91,18 @@
 
                 //mostrar notificacion de ok
                 crearNotificacionOK('Contactos obtenidos correctamente','todo en orden')
+
+                //eliminar loader
+                eliminarLoader();
             }
 
 
     function crearTablaContactosError(){
         //mostrar notificacion de error
-        crearNotificacionError('No se han podido obtener los contactos','error')
+        crearNotificacionError('No se han podido obtener los contactos','error');
+
+        //eliminar loader
+        eliminarLoader();
     }
     function crearNotificacion(mensaje,titulo)
     {
@@ -97,6 +150,29 @@
     {
         let elementoNotificacion = document.getElementById('notificacion');
         elementoNotificacion.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(color);
+    }
+    function crearLoader(elementoPadre)
+    {
+        eliminarLoader()
+        let loader = document.createElement('div');
+        loader.id = 'loader';
+        loader.appendChild(document.createElement('div'));
+        loader.appendChild(document.createElement('div'));
+        loader.appendChild(document.createElement('div'));
+        loader.appendChild(document.createElement('div'));
+        loader.classList.add('lds-ring');
+        document.getElementById(elementoPadre).appendChild(loader);
+    }
+    function eliminarLoader()
+    {
+        let loader = document.getElementById('loader');
+        if(loader) loader.remove();
+    }
+    function eliminarTabla()
+    {
+        let tabla = document.getElementById('tablaContactos');
+        if(tabla) tabla.remove();
+
     }
 
 </script>
