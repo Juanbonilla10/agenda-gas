@@ -5,6 +5,8 @@
     //obtener datos
     let nombre = document.getElementById('nombre').value;
     let correo = document.getElementById('correo').value;
+    let apellidos = document.getElementById('apellidos').value;
+    let telefono = document.getElementById('telf').value;
 
     //cerrar modal
     bootstrap.Modal.getInstance(document.getElementById('crearContactoModal')).hide();
@@ -15,7 +17,7 @@
     google.script.run
     .withSuccessHandler(contactoInsertadoCorrectamente)
     .withFailureHandler(contactoInsertadoError)
-    .insertarContacto(nombre,correo);
+    .insertarContacto(nombre,apellidos,correo,telefono);
 
     }
 
