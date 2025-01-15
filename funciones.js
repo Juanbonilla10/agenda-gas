@@ -26,3 +26,8 @@ function borracContacto(numFila)
 {
     HOJA.deleteRow(numFila);
 }
+function modificarContacto(numFila,datos)
+{
+    let celdas = HOJA.getRange('A'+numFila+':D'+numFila);
+    celdas.setValues([[datos.nombre,datos.apellidos,datos.correo,datos.telefono]]);
+}

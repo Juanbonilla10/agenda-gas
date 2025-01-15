@@ -93,7 +93,7 @@
                         tablaHeader.appendChild(fila);
                         tabla.appendChild(tablaHeader);
                     }else{
-                        fila.appendChild(crearCeldaBotones(i+1));
+                        fila.appendChild(crearCeldaBotones(i+1,filaActual));
                         tablaBody.appendChild(fila);
                     }
                     
@@ -114,7 +114,7 @@
                 eliminarLoader();
             }
     
-    function crearCeldaBotones(numFila)
+    function crearCeldaBotones(numFila,datosContacto)
     {
         //crear celda
         let celda = document.createElement('td');
@@ -132,7 +132,7 @@
 
         //crear boton modificar
         let botonModificar = document.createElement('button');
-        //botonModificar.onclick = () => modificarContacto(numFila);
+        botonModificar.onclick = () => abrirModalModificarContacto(numFila,datosContacto);
         botonModificar.classList.add('btn','btn-warning','m-1');
         
 
@@ -148,6 +148,101 @@
         return celda;
 
     }
+
+    function abrirModalCrearContacto()
+    {
+        //bton crear
+        let boton = document.getElementById('botonCrearModificar');
+        boton.textContent = 'Crear contacto';
+        boton.classList = '';
+        boton.classList.add('btn','btn-success');
+
+        //cambiar titulo
+        document.getElementById('tituloModal').textContent = 'Crear contacto';
+
+        //modificar submit
+        document.getElementById('formulario').onsubmit = () => insertarContacto();
+
+        //obtener datos
+        document.getElementById('nombre').value = '';
+        document.getElementById('apellidos').value = '';
+        document.getElementById('correo').value = '';
+        document.getElementById('telf').value = '';
+
+        //abrir modal
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('crearContactoModal')).show();
+    }
+
+    function abrirModalModificarContacto(numFila,datosContacto)
+    {
+        //bton modificar
+        let boton = document.getElementById('botonCrearModificar');
+        boton.textContent = 'Modificar contacto';
+        boton.classList = '';
+        boton.classList.add('btn','btn-warning');
+
+        //cambiar titulo
+        document.getElementById('tituloModal').textContent = 'Modificar contacto';
+
+        //modificar submit
+        document.getElementById('formulario').onsubmit = () => modificarContacto(numFila);
+
+        //obtener datos
+        document.getElementById('nombre').value = datosContacto[0];
+        document.getElementById('apellidos').value = datosContacto[1];
+        document.getElementById('correo').value = datosContacto[2];
+        document.getElementById('telf').value = datosContacto[3];
+
+        //abrir modal
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('crearContactoModal')).show();
+
+
+
+    }
+
+    function modificarContacto(numFila)
+    {
+
+        //cerrar modal
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('crearContactoModal')).hide();
+
+        //obtener nuevos datos a partir del nuevo formulario
+        let nombre = document.getElementById('nombre').value;
+        let correo = document.getElementById('correo').value;
+        let apellidos = document.getElementById('apellidos').value;
+        let telefono = document.getElementById('telf').value;
+
+        //eliminar tabla
+        eliminarTabla();
+
+        //crear loader
+        crearLoader('divContactos');
+
+        google.script.run
+        .withSuccessHandler(contactoModificadoCorrectamente)
+        .withFailureHandler(contactoModificadoError)
+        .modificarContacto(numFila,{nombre,apellidos,correo,telefono});
+    }
+    function contactoModificadoCorrectamente()
+    {
+         // mostrar notificacion
+         crearNotificacionOK('Contacto modificado correctamente','MODIFICADO OK');
+
+        //eliminar loader
+        eliminarLoader()
+
+        //mostrar tabla contactos
+        crearTableContactos();
+    }
+    function contactoModificadoError()
+    {
+        crearIconoNotificacionError('No se ha podido modificar el contacto','ERROR');
+        //eliminar loader
+        eliminarLoader()
+        //mostrar tabla contactos
+        crearTableContactos();
+    }
+
     function borrarContacto(numFila)
     {
         //eliminar tabla

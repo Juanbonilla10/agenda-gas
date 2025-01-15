@@ -3,8 +3,8 @@
     <div class="d-flex justify-content-center my-3">
             <button type="button" class="btn btn-success m-2" onclick="crearTableContactos()">Mostrar contactos</button>
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary m-2" data-bs-toggle="modal" data-bs-target="#crearContactoModal">
-                Nuevo Contacto
+            <button type="button" class="btn btn-primary m-2" onclick="abrirModalCrearContacto()">
+                Crear Contacto
             </button>
     </div>
     
@@ -32,7 +32,7 @@
         <div class="modal-lg modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-            <h1 class="modal-title fs-5" id="tituloCrearContactoModal">Nuevo Contacto</h1>
+            <h1 class="modal-title fs-5" id="tituloModal">Nuevo Contacto</h1>
             </div>
             <!--Formulario-->
             <form onsubmit="insertarContacto()" method="dialog" id="formulario">
@@ -55,8 +55,8 @@
                             </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancenlar</button>
-                    <button type="submit" class="btn btn-primary">Crear contacto</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button id="botonCrearModificar" type="submit" class="btn btn-primary">Crear contacto</button>
                 </div>
             </form>
         </div>
