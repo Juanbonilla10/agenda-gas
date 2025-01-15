@@ -2,6 +2,9 @@
         
     function crearTableContactos(){
 
+        let tabla = document.getElementById('tablaContactos');
+        if(tabla) tabla.remove();
+
         google.script.run
         .withSuccessHandler(crearTablaContactosCorrectamente)
         .withFailureHandler(crearTablaContactosError)
@@ -12,8 +15,7 @@
 
     function crearTablaContactosCorrectamente(obj)
             {
-                let tabla = document.getElementById('tablaContactos');
-                if(tabla) tabla.remove();
+                
                 tabla = document.createElement('table');
                 tabla.id = 'tablaContactos';
                 let tablaHeader = document.createElement('thead');
